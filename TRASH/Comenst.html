@@ -1,0 +1,52 @@
+<html>
+<head>
+<title>Устройство самолёта</title>
+<link rel="stylesheet" type="text/css" href="css/dopstyle.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+</head>
+<body BGCOLOR="#ffffff">
+    <div Class="nav" >
+        <a class="floating-button" href="Untitled-1.html" smooth style="font-size: 20px; text-decoration: none;">
+            Главная
+    </a>
+    </div>
+
+    <div style="padding-top: 100;">
+
+        <div style="padding-left: 50 ;">
+            <div>
+                <h1 class="Color-text-1">Оставьте отзыв</h1>
+            </div>
+    
+            <div style="display:flex">
+                <form action="http://ab-w.net/comments.php" method="post" name="commentform" id="commentform">
+                    <p>Выберите тип обращения:</p>
+                    <p><select name="dostavka" size="1">
+                        <option value="Jaloba" > Жалоба </option>
+                        <option value="predlojenie" selected> Предложение </option>
+                        <option value="otziv"> Отзыв </option>
+                    </select></p>
+                    
+                    <p><input type="text" name="author" id="author" value="" size="25" />
+                        <small> Имя</small></p>
+                    <p><input type="text" name="email" id="email" value="" size="25" />
+                        <small> Mail</small></p>
+                    Выберите верные варианты:<br />
+                    <input type="checkbox" name="transport" value="airplane" checked="checked" />Доволен сервисом<br />
+                    <input type="checkbox" name="transport" value="train" /> Нет затруднений в навигации по сайту<br />
+                    <input type="checkbox" name="transport" value="car" /> Остался доволен сервисом<br />
+                    <input type="checkbox" name="transport" value="bus" /> Посоветую сервис знакомым<br /><br />
+                    Вы пользовались сервисом?<br />
+                    <input type="radio" name="Sex" value="Мужской" checked="checked" /> Да<br />
+                    <input type="radio" name="Sex" value="Женский" /> Нет<br /><br />
+                    <p><textarea name="comment" id="comment" cols="48" rows="8">Отзыв</textarea></p>
+                    <p><input name="submit" type="submit" id="submit" value="Отправить" /></p>
+                    
+                    
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+
+<html>
+<head>
+<title>Бронирование авиабилетов</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" charset="utf-8">
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<!-- <link rel="stylesheet" type="text/css" href="https://code.jquery.com/jquery-3.6.1.min.js"> -->
+<script type="text/javascript" src="Script.js"></script>
+<script type="text/javascript" src="jquery-3.6.1.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script> -->
+<script src="js/vue.js"></script>
+<script src='axios/dist/axios.min.js'></script>
+<style>
+    select {border:none;
+    width: 240px;
+    /* height: 35px; */
+    padding: 4px;
+    border-radius:4px;
+    box-shadow: 2px 2px 8px #999;
+    background: #23345f;
+    border: none;
+    outline: none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance: none;
+    appearance: none;
+    cursor: pointer;
+    }
+    label {border:none;
+    position: relative;
+    }
+    label:after {
+    content:'<>';
+    font: 11px "Consolas", monospace;
+    color: #666;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+    right: 8px; 
+    top:2px;
+    padding: 0 0 2px;
+    border-bottom: 1px solid #ddd;
+    position: absolute;
+    pointer-events: none;
+    }
+    label:before {
+    content: '';
+    right: 6px; 
+    top:0px;
+    width: 20px; 
+    height: 20px;
+    background: #eee;
+    position: absolute;
+    pointer-events: none;
+    display: block;
+    }
+
+    ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: white;
+        opacity: 1; /* Firefox */
+    }
+    
+  </style>
+</head>
+<!-- OnLoad="alert('Начнем?')" -->
+<body>
+
+    
+    <div class="container-fluid">
+        <div  Class="Shapka row" style="display: flex; flex-direction: column; ">
+            <div Class="navs" >
+        
+                <a class="floating-button" href="http://localhost:9999/frolov_a/Web/kursath/Sky/" smooth style="font-size: 20px; text-decoration: none;">
+                        Главная
+                </a>
+
+                <a class="floating-button" href="#part1" smooth style="font-size: 20px; text-decoration: none;">
+                        Предложения
+                </a>
+
+                <a class="floating-button" href="#Preem" smooth style="font-size: 20px; text-decoration: none;">
+                        Преимущества
+                </a>
+
+                <a class="floating-button" href="lists.php" smooth style="font-size: 20px; text-decoration: none;">
+                        Рейсы
+                </a>
+
+                <a class="floating-button" href="city.php" smooth style="font-size: 20px; text-decoration: none;">
+                        города
+                </a>
+
+                <a class="floating-button" href="http://localhost:9999/frolov_a/Web/kursath/Sky/Login/login.php" smooth style="font-size: 20px; text-decoration: none; float: right; border-radius: 100px;">
+                        <img src="http://localhost:9999/frolov_a/Web/kursath/Sky/Pict/user_icon.png" width="40" height="40" style="margin: 5 0 5 0; " alt="" >
+                </a>
+
+        </div>
+            <!-- <hr color="#84ceeb"/> -->
+            
+            <div style="font-size: 20px; padding-top: 200px; padding-left: 50; padding-right: 50;">
+                <h1 class="text-center Color-text-2" ></style> Поиск авиабилетов</h1>
+                <h2 class="text-center Color-text-2" ></style> Бронирование</h2>
+    
+                <div id="myapp" Class="text-center Search Color-text-1">
+    
+                    <form name="forma_zakaza" action="broni\bron.php" method="post" style="padding-top: 18;">
+    
+                        <input class="gradient-button-left Color-text-2" type="reset" name="enter" value="Стереть" />
+
+                        <input class="gradient-tex Color-text-2" required name="otkyda" v-model="otkyda" placeholder="Откуда"  autocomplete="on" list="city">
+
+                        <input class="gradient-tex Color-text-2" required name="kyda" v-model="kyda" placeholder="Куда" list="city">
+                        <datalist id="city">
+                            <option v-for="city in citys">{{city.location}}</option>
+                        </datalist>
+                        
+                        <input class="gradient-tex Color-text-2" required name="kogda" v-model="kogda" type="date" placeholder="Когда">
+    
+                        <!-- <input class="gradient-tex" name="obratno" type="date" placeholder="Обратно"> -->
+                        
+                        <input class="gradient-button-right  Color-text-2" type="button" name="enter" v-on:click="GetSelect()" value="Далее"/>
+                        <div v-show="visible" style="display: none; display: flex; align-items: center; justify-content: center;">
+                            <p><select name="airport_id_dep" required size="3" v-model="airport_id_dep">;
+                                <option class="Color-text-2" disabled>аэропорты вылета</option>; 
+                                <option class="Color-text-2" v-for='result in results.result1' v-bind:value="result.airport_id"> {{ result.airport_name }} </option>
+                            </select><p>
+                            <p><select name="airport_id_dep_arri" required size="3" v-model="airport_id_dep_arri">;
+                                <option class="Color-text-2" disabled>аэропорты прилёта</option>; 
+                                <option class="Color-text-2" v-for='result in results.result2' v-bind:value="result.airport_id"> {{ result.airport_name }} </option>
+                            </select><p>
+                            <input class="gradient-button-right Color-text-2" style="left: 5px; height: 35px;" type="submit" name="enter" value="Далее"/>
+                        </div>
+    
+                    </form>
+                </div>
+            </div>
+        </div>
+    <!-- <div id="airplane">
+        <img src="airplane.png" alt="airplane">
+    </div> -->
+            <div Class="row" style="font-size: 20px; display: flex; flex-direction: column; background-color: #ffffff  ; border-radius: 10px; padding: 50px;">
+                <div id="part1" style="padding: 0;">
+                    <div style="font-size: 20px; display: flex; flex-direction: row; background-color: #b17b6691  ; border-radius: 10px; padding: 50px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px">
+                        <!-- <img src="ticket.jpg" style="max-height: 150; border-radius: 10px;" /> -->
+                        <!-- <article id="part1"></article> -->
+                        <div style="max-width: 450; padding: 5px; border-right: 5px solid #8860D0;  border-radius: 10px; ">
+                            <h2 align = right class="Color-text-1"></style> <ins>Лучшие</ins> предложения по авиабилетам</h2>
+                        </div>
+                        <div style = "padding: 10px;">
+                            
+                            <P align="left" style = "font-family: Arial, Helvetica, sans-serif; padding: 10px;">
+                                <big>Больше</big> нет необходимости посещать несколько сайтов. Мы уже сделали это за Вас: собрали информацию о дешевых авиаперелетах с сотен сайтов авиакомпаний премиум-класса, низкобюджетных перевозчиков и крупнейших туристических интернет-агентств и подобрали лучшие спецпредложения.
+                            </P>
+                        </div>
+                        
+                    </div>
+                    <img src="http://localhost:9999/frolov_a/Web/kursath/Sky/Pict/FMM.jpg" style=" border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; position:relative; "alt="" />
+                </div>
+            </br>
+                <div id="Preem" >
+                    <h2 class="Color-text-1" style="background-color: #84ceeb2a  ; border-radius: 10px; padding: 10px; height: 130; width: 18%; min-width: 250;"></style> преимущества самолета перед поездом</h2>
+                    <div style="width: 63%;">
+                        <P class="text-center" style = "font-family: Arial, Helvetica, sans-serif; padding: 40px; ">
+                            Масса преимуществ авиатранспорта позволило ему завоевать большую популярность по всему миру, поэтому нет ничего удивительного в том, что с каждым годом пассажиропоток в аэропортах только увеличивается.
+                        
+                        </P> 
+                        <div id="point" >
+                            <h3  class="text-center" style = "font-family: Arial, Helvetica, sans-serif; padding: 10px;">
+                                <a style = "font-family: Arial, Helvetica, sans-serif;" onmousedown="$('#Dost').slideToggle();" >К главным достоинствам авиатранспорта можно отнести его следующие характеристики:</a>
+                            </h3>
+                            
+                        </div>
+                        <div id="Dost" style="display: none;">
+                            Главным преимуществом путешествий на самолете является высочайшая скорость. За считанные часы авиалайнер способен преодолеть тысячи километров, доставив фактически в любую страну пассажира. Этот фактор является особенно значимым в ситуации, когда речь идет о сжатых временных рамках;
+    
+    в отличие от путешествий на поезде, даже трансатлантические перелеты в страны Северной Америки не кажутся такими уж утомительными. Это связано с тем, что даже такие далекие маршруты не предполагают путешествие на протяжении нескольких суток, даже с учетом возможной необходимости пересадки при выборе чартерных рейсов;
+    
+    сервис и качество обслуживания в авиатранспорте всегда были на голову выше, чем в любом другом транспорте. Во время полета авиапассажирам перевозчик предлагает бесплатные напитки и закуски. Также клиенты авиакомпаний могут во время полета отвлечься на просмотре фильмов или чтении журналов, которые можно найти возле каждого посадочного места;
+    
+    удобные сиденья в салоне авиалайнера дают возможность полноценно расслабиться во время многочасового полета и даже заснуть;
+    
+    также нужно отметить, что современные интернет-сервисы авиакомпаний дают возможность пассажирам не стоять в очередях, а приобретать авиабилеты и их бронировать через официальные сайты авиаперевозчиков, а также через сайты компаний-посредников. При этом такой услугой можно воспользоваться в любое время суток, что очень удобно;
+    
+    самолет дает возможность посетить любую страну и любой континент, куда невозможно добраться автобусом или по железной дороге.<p id="point" onmousedown="$('#Dost').slideToggle();" style="color: red;"> скрыть</p>
+                        </div>
+    
+                        <div class="row">
+                            <div class="col-md-5 col-md-offset-5" ></div>
+                            <hr class="col-md-2" size="5" color="#8860D0" style= "border-radius: 10px; " />
+                            <div class="col-md-5 col-md-offset-5" ></div>
+                        </div> 
+                        <!-- <hr class="mt-4 mb-8" size="5" color="#8860D0" style= "border-radius: 10px; " /> -->
+    
+                    </div>
+                    
+                    <img src="http://localhost:9999/frolov_a/Web/kursath/Sky/Pict/SvsP.jpg" align="left"  style="border-radius: 10px; width: 280; height: 150 " alt=""/>
+                </div>
+    
+            <div  style="font-size: 20px; display: flex; flex-direction:row; border-radius: 10px; ">
+                <!-- <iframe  height="230" width="800" style= "border-radius: 10px;  padding: 17px; filter:saturate(0.9);" src="https://www.youtube.com/embed/wI54mu2MD6U" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> -->
+    
+                <div>
+                <P class="Color-text-1">
+                    <a style = "font-family: Arial, Helvetica, sans-serif;" href="InKarta.html">
+                        <a href="#"
+                        OnMouseOver="B_B.src='/Pict/SvsP2.png'"
+                        OnMouseOut="B_B.src='/Pict/Aviakassa-Uzbekistan.jpg'">
+    
+                        <img id=B_B class="img-thumbnail" src="http://localhost:9999/frolov_a/Web/kursath/Sky/Pict/Aviakassa-Uzbekistan.jpg" width="200" height="128" align="button" style="margin-top: 18;" alt="" >
+                    </a> Что такое самолет - <a style = "font-family: Arial, Helvetica, sans-serif;" href="InKarta.html">Подробнее</a>
+                </P>
+                    
+                <P onmousedown="this.style.fontStyle='italic';
+                this.style.color='red'" onmouseup="this.style.fontStyle='';
+                this.style.color='blue'" > класс воздушных судов тяжелее воздуха, предназначенных для полётов в атмосфере с помощью силового агрегата, создающего тягу и неподвижного относительно других частей аппарата крыла, создающего подъёмную силу.</P> 
+            </div>
+            </div>
+        </div>
+
+    <div Class="row">
+        <div Class="Floor">
+            <div>
+                &nbsp; 
+                <p class="Color-text-2" style = " margin: 40px;"> <big>Sky.com</big> &#xa9; </p>
+                <p><a class="Color-text-2" href="admin_panel.php" smooth style = "font-size: 20px; margin: 40px;">Админ панель</a></p>
+                &nbsp;
+            </div>
+        </div>
+    </div>
+
+</div>
+<script>
+    var app = new Vue({
+        el: '#myapp',
+        data: {
+            visible: false,
+            // users: "",
+            results: {result1: [], result2: []},
+            otkyda: '',
+            kyda: '',
+            kogda: '',
+            airport_id_dep: '',
+            airport_id_dep_arri: '',
+            citys: '',
+            
+
+        },
+
+        computed: {
+
+        },
+        methods: {
+            // ListRecords: function(){
+            //     axios.get('broni/data_for_select.php').then(function (response) {
+            //         app.users = response.data;
+            //     }).catch(function (error) {
+            //         console.log(error);
+            //     });
+            // },
+            GetSelect: function(){
+                this.visible=!this.visible
+                let formData = new FormData();
+                formData.append('otkyda', this.otkyda)
+                formData.append('kyda', this.kyda)
+                formData.append('kogda', this.kogda)
+                axios({
+                    method: 'post',
+                    url: 'broni/data_for_select.php',
+                    data: formData,
+                    config: { headers: {'Content-Type': 'multipart/form-data' }}
+                }).then(function (response) {
+                    app.results = response.data;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+            GetDatalist: function(){
+                axios.get('data_for_dadalist.php').then(function (response) {
+                    app.citys = response.data;
+                }).catch(function (error) {
+                    console.log(error);
+                });
+            },
+
+        }
+    })
+    app.GetDatalist();
+</script>
+</body>
+
+</html>
+
